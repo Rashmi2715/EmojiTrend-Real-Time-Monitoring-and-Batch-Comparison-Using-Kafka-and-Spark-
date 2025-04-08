@@ -1,0 +1,7 @@
+flask
+kafka-python
+emoji
+requests
+psycopg2-binary
+pyspark
+findspark

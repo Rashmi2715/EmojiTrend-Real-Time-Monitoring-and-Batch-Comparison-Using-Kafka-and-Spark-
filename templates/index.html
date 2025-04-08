@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IPL Emoji Reactions</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        .emoji-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .emoji-btn {
+            font-size: 36px;
+            padding: 15px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: #f0f0f0;
+        }
+        .emoji-btn:hover { background-color: #d1d1d1; }
+        .message { margin-top: 20px; font-size: 18px; color: green; }
+    </style>
+</head>
+<body>
+    <h1>🏏 React to IPL Moments with Emojis</h1>
+    <div class="emoji-container">
+        <button class="emoji-btn">🔥</button>
+        <button class="emoji-btn">💥</button>
+        <button class="emoji-btn">😱</button>
+        <button class="emoji-btn">🙌</button>
+        <button class="emoji-btn">🎯</button>
+        <button class="emoji-btn">😢</button>
+        <button class="emoji-btn">😂</button>
+        <button class="emoji-btn">👏</button>
+        <button class="emoji-btn">😡</button>
+        <button class="emoji-btn">😎</button>
+        <button class="emoji-btn">💪</button>
+        <button class="emoji-btn">😭</button>
+        <button class="emoji-btn">🤯</button>
+        <button class="emoji-btn">👎</button>
+    </div>
+    <div class="message" id="messageBox"></div>
+
+    <script>
+        const buttons = document.querySelectorAll('.emoji-btn');
+        const messageBox = document.getElementById('messageBox');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                fetch('/send_emoji', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ emoji: btn.innerText })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    messageBox.innerText = `✅ Sent: ${data.message.emoji} (${data.message.meaning})`;
+                })
+                .catch(() => {
+                    messageBox.innerText = "❌ Error sending emoji!";
+                });
+            });
+        });
+    </script>
+</body>
+</html>
