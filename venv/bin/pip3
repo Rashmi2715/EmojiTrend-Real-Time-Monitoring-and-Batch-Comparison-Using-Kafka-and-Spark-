@@ -1,4 +1,4 @@
-#!/home/y-m-rashmi/DBT_Project/venv/bin/python3
+#!/home/shiva/programs/dbt/emoji/venv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

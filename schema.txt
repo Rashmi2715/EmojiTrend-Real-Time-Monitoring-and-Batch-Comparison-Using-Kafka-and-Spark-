@@ -1,0 +1,24 @@
+CREATE TABLE emoji_reactions (
+    id SERIAL PRIMARY KEY,
+    user_id VARCHAR(50),
+    emoji VARCHAR(10),
+    timestamp TIMESTAMP,
+    meaning TEXT
+);
+
+
+CREATE TABLE emoji_trending_stream (
+    id SERIAL PRIMARY KEY,
+    emoji TEXT,
+    count INTEGER,
+    inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE emoji_usage_stats (
+    id SERIAL PRIMARY KEY,
+    emoji VARCHAR(10),
+    count INT,
+    time_window TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+

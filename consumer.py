@@ -19,9 +19,9 @@ consumer = KafkaConsumer(
 # Connect to PostgreSQL
 try:
     conn = psycopg2.connect(
-        dbname="emoji_stream_db",
-        user="rashmi",
-        password="2715",
+        dbname="emoji",
+        user="shiva",
+        password="0819",
         host="localhost",
         port="5432"
     )

@@ -6,9 +6,9 @@ import sys
 # Connect to PostgreSQL
 try:
     conn = psycopg2.connect(
-        dbname="emoji_stream_db",
-        user="rashmi",
-        password="2715",
+        dbname="emoji",
+        user="shiva",
+        password="0819",
         host="localhost",
         port="5432"
     )
@@ -42,7 +42,7 @@ try:
 
             # Insert into PostgreSQL
             cursor.execute("""
-                INSERT INTO emoji_trending (emoji, count)
+                INSERT INTO emoji_trending_stream (emoji, count)
                 VALUES (%s, %s)
             """, (value['emoji'], value['count']))
             conn.commit()
