@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_json, struct, window
+from pyspark.sql.functions import col, to_json, struct, window, row_number
+from pyspark.sql.window import Window as W
 
 # Initialize Spark session
 spark = SparkSession.builder \
@@ -25,15 +26,26 @@ emoji_df = spark.read \
     .jdbc(url=jdbc_url, table="emoji_reactions", properties=db_properties) \
     .withColumn("timestamp", col("timestamp").cast("timestamp"))
 
-# Perform 30-second window aggregation
+# Perform 1-hour window aggregation
 aggregated_df = emoji_df \
     .groupBy(
         window(col("timestamp"), "1 Hour"),
         col("emoji")
     ).count()
 
+# Rank emojis within each 1-hour window
+ranked_df = aggregated_df.withColumn(
+    "rank",
+    row_number().over(
+        W.partitionBy("window").orderBy(col("count").desc())
+    )
+)
+
+# Filter only the top emoji per window
+top_emoji_df = ranked_df.filter(col("rank") == 1)
+
 # Prepare data to send to Kafka
-output_df = aggregated_df.select(
+output_df = top_emoji_df.select(
     col("emoji"),
     col("count"),
     col("window.start").alias("time_window")
@@ -47,5 +59,5 @@ output_df.write \
     .option("topic", "emoji_batch_results") \
     .save()
 
-print("✅ Emoji batch processed from PostgreSQL and pushed to Kafka.")
+print("✅ Top emoji per hour interval pushed to Kafka.")
 
